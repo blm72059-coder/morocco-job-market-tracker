@@ -25,3 +25,7 @@ FEEDS = {
 
 DUPEFILTER_CLASS = "scrapy.dupefilters.BaseDupeFilter"
 LOG_LEVEL = "INFO"
+ITEM_PIPELINES = {
+    "jobtracker.pipelines.DeduplicationPipeline": 100,  # runs first
+    "jobtracker.pipelines.PostgreSQLPipeline":    200,  # runs second
+}
