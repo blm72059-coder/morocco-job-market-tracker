@@ -136,6 +136,6 @@ morocco-job-market-tracker/
 
 ## 👤 Author
 
-**Your Name** — Data Analyst / Data Scientist  
+**Bali Marouane** — Data Analyst / Data Scientist  
 [LinkedIn](https://www.linkedin.com/in/marouane-bali-016782240/) ·
 [GitHub](https://github.com/blm72059-coder)
