@@ -2,6 +2,8 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 from datetime import datetime
+import spacy
+from jobtracker.skills_list import SKILLS
 
 load_dotenv()
 
@@ -53,7 +55,7 @@ class PostgreSQLPipeline:
     def open_spider(self, spider):
         self.conn = psycopg2.connect(
             host=os.getenv("DB_HOST", "localhost"),
-            port=os.getenv("DB_PORT", "5432"),
+            port=os.getenv("DB_PORT", "5433"),
             dbname=os.getenv("DB_NAME", "morocco_jobs"),
             user=os.getenv("DB_USER", "postgres"),
             password=os.getenv("DB_PASSWORD"),
@@ -103,3 +105,79 @@ class PostgreSQLPipeline:
         self.cur.close()
         self.conn.close()
         spider.logger.info(f"[DB] Closed connection — {self.inserted} new jobs inserted")
+
+# Load French spaCy model once (not per item — that would be slow)
+nlp = spacy.load("fr_core_news_sm")
+
+# Lowercase skills list for case-insensitive matching
+SKILLS_LOWER = {skill.lower(): skill for skill in SKILLS}
+
+
+class NLPPipeline:
+
+    def open_spider(self, spider):
+        try:
+            self.conn = psycopg2.connect(
+                host=os.getenv("DB_HOST", "localhost"),
+                port=os.getenv("DB_PORT", "5433"),  # ← change to 5433
+                dbname=os.getenv("DB_NAME", "morocco_jobs"),
+                user=os.getenv("DB_USER", "postgres"),
+                password=os.getenv("DB_PASSWORD"),
+            )
+            self.cur = self.conn.cursor()
+            spider.logger.info("[NLP] Connected to PostgreSQL")
+        except Exception as e:
+            spider.logger.error(f"[NLP] Connection failed: {e}")
+            self.conn = None
+            self.cur = None
+
+    def process_item(self, item, spider):
+        description = item.get("description", "")
+        job_url     = item.get("job_url", "")
+
+        if not description:
+            return item
+
+        # Find the job's id in the database using its URL
+        self.cur.execute("SELECT id FROM jobs WHERE job_url = %s", (job_url,))
+        row = self.cur.fetchone()
+
+        if not row:
+            return item  # job not found, skip
+
+        job_id = row[0]
+
+        # Tokenize with spaCy
+        doc = nlp(description.lower())
+
+        # Check which skills appear in the description
+        found_skills = set()
+        text_lower = description.lower()
+
+        for skill_lower, skill_original in SKILLS_LOWER.items():
+            if skill_lower in text_lower:
+                found_skills.add(skill_original)
+
+        # Insert each found skill into job_skills table
+        for skill in found_skills:
+            try:
+                self.cur.execute("""
+                    INSERT INTO job_skills (job_id, skill, date_scraped)
+                    VALUES (%s, %s, %s)
+                    ON CONFLICT DO NOTHING
+                """, (job_id, skill, item.get("date_scraped")))
+            except Exception as e:
+                self.conn.rollback()
+                spider.logger.error(f"[NLP] Insert error: {e}")
+                continue
+
+        self.conn.commit()
+        spider.logger.info(f"[NLP] {len(found_skills)} skills found for job_id {job_id}")
+        return item
+
+    def close_spider(self, spider):
+        if hasattr(self, 'cur') and self.cur:
+            self.cur.close()
+        if hasattr(self, 'conn') and self.conn:
+            self.conn.close()
+        spider.logger.info("[NLP] Pipeline closed")
