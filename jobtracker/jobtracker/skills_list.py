@@ -3,7 +3,7 @@
 SKILLS = [
     # Programming languages
     "Python", "Java", "JavaScript", "TypeScript", "C++", "C#", "PHP", "Ruby",
-    "Swift", "Kotlin", "R", "Scala", "Go", "Rust",
+    "Swift", "Kotlin", "langage R", "Scala", "Golang", "Rust",
 
     # Web frameworks
     "Django", "Flask", "FastAPI", "React", "Angular", "Vue", "Node.js",
