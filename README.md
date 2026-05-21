@@ -98,41 +98,23 @@ scrapy crawl emploima
 
 ---
 
-## 🗂️ Project Structure
 
-morocco-job-market-tracker/
-├── jobtracker/
-│   ├── spiders/
-│   │   ├── rekrute_spider.py     # Rekrute.com scraper
-│   │   └── emploima_spider.py    # Emploi.ma scraper
-│   ├── items.py                  # Data schema
-│   ├── pipelines.py              # Processing pipeline
-│   └── settings.py               # Scrapy configuration
-├── data/
-│   └── raw/                      # Raw JSON output (git-ignored)
-├── notebooks/                    # EDA and analysis (coming Week 3)
-├── .env.example
-├── requirements.txt
-└── README.md
 
----
-
-## 📅 Roadmap
-
-- [x] **Week 1** — Spider setup (Rekrute + Emploi.ma scrapers)
-- [ ] **Week 2** — Scheduling + deduplication pipeline  
-- [ ] **Week 3** — PostgreSQL schema + data ingestion
-- [ ] **Week 4** — NLP skill extraction with spaCy
-- [ ] **Week 5** — Power BI dashboard (5 pages)
-- [ ] **Week 6** — GitHub polish + LinkedIn article
-
----
 
 ## 📸 Dashboard Preview
 
-*(Coming in Week 5)*
+*(Coming soon)*
 
 ---
+## Avertissement légal
+
+Les données collectées sont exclusivement des offres d'emploi 
+publiquement accessibles sur Rekrute.com et Emploi.ma.
+
+- Aucune donnée personnelle n'est collectée
+- Le projet est strictement non commercial et à des fins d'analyse
+- Les délais de crawl sont respectés (robots.txt)
+- Les données brutes ne sont pas publiées — uniquement les analyses agrégées
 
 ## 👤 Author
 
