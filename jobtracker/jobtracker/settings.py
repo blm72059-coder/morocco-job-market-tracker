@@ -7,7 +7,7 @@ SPIDER_MODULES = ["jobtracker.spiders"]
 NEWSPIDER_MODULE = "jobtracker.spiders"
 
 # Sources: rekrute.com, emploi.ma
-DOWNLOAD_DELAY = 2
+DOWNLOAD_DELAY = 10
 RANDOMIZE_DOWNLOAD_DELAY = True
 CONCURRENT_REQUESTS = 1
 AUTOTHROTTLE_ENABLED = True
