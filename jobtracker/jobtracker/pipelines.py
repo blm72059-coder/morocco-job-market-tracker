@@ -119,7 +119,7 @@ class NLPPipeline:
         try:
             self.conn = psycopg2.connect(
                 host=os.getenv("DB_HOST", "localhost"),
-                port=os.getenv("DB_PORT", "5433"),  # ← change to 5433
+                port=os.getenv("DB_PORT", "5433"),  
                 dbname=os.getenv("DB_NAME", "morocco_jobs"),
                 user=os.getenv("DB_USER", "postgres"),
                 password=os.getenv("DB_PASSWORD"),
