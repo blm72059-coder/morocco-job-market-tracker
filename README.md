@@ -66,7 +66,7 @@ Emploi.ma    ───► Scrapy Spider ───► PostgreSQL  ───► Py
 | Scraping | Python 3.13, Scrapy 2.15 |
 | Storage | PostgreSQL, CSV / JSON data lake |
 | Processing | Pandas, PySpark |
-| NLP | spaCy (skill extraction — Week 4) |
+| NLP | spaCy |
 | Visualisation | Power BI Desktop |
 | Scheduling | APScheduler |
 
