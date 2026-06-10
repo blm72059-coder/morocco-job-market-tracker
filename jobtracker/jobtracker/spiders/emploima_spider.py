@@ -4,19 +4,23 @@ from datetime import datetime
 from jobtracker.items import JobItem
 
 
-class EmploiMaSpider(scrapy.Spider):
-    name = "emploima"
-    allowed_domains = ["emploi.ma"]
+KEYWORDS_LIST = [
+    "data",
+    "data scientist",
+    "data analyst",
+    "machine learning",
+    "python",
+    "business intelligence",
+]
+MAX_PAGES = 3
 
-    KEYWORDS  = "data"
-    MAX_PAGES = 5
-
-    async def start(self):
+async def start(self):
+    for keyword in self.KEYWORDS_LIST:
         for page in range(0, self.MAX_PAGES):
             url = (
                 f"https://www.emploi.ma/recherche-jobs-maroc/"
-                f"{self.KEYWORDS}"
-                f"?page={page}"
+                f"?{keyword.replace(' ', '+')}"
+                f"&page={page}"
             )
             yield scrapy.Request(
                 url,

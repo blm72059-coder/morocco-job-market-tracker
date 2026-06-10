@@ -8,18 +8,30 @@ class RekruteSpider(scrapy.Spider):
     name = "rekrute"
     allowed_domains = ["rekrute.com"]
 
-    KEYWORDS  = "data"
-    MAX_PAGES = 5
+    # Liste de tous les keywords à scraper
+    KEYWORDS_LIST = [
+        "data scientist",
+        "data analyst",
+        "machine learning",
+        "intelligence artificielle",
+        "big data",
+        "data engineer",
+        "python",
+        "power bi",
+        "business intelligence",
+    ]
+    MAX_PAGES = 3  # 3 pages par keyword
 
     async def start(self):
-        for page in range(1, self.MAX_PAGES + 1):
-            url = (
-                f"https://www.rekrute.com/offres.html"
-                f"?s=3&p={page}&o=1"
-                f"&query={self.KEYWORDS}"
-                f"&keyword={self.KEYWORDS}"
-            )
-            yield scrapy.Request(url, callback=self.parse_listing)
+        for keyword in self.KEYWORDS_LIST:
+            for page in range(1, self.MAX_PAGES + 1):
+                url = (
+                    f"https://www.rekrute.com/offres.html"
+                    f"?s=3&p={page}&o=1"
+                    f"&query={keyword.replace(' ', '+')}"
+                    f"&keyword={keyword.replace(' ', '+')}"
+                )
+                yield scrapy.Request(url, callback=self.parse_listing)
 
     def parse_listing(self, response):
         jobs = response.css("li.post-id")
