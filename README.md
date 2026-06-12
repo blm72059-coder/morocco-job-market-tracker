@@ -103,7 +103,11 @@ scrapy crawl emploima
 
 ## 📸 Dashboard Preview
 
-*(Coming soon)*
+![Locations](Location.png)
+![Overview](Overview.png)
+![Skills](Skills.png)
+![Seniority](Seniority.png)
+
 
 ---
 ## Avertissement légal
